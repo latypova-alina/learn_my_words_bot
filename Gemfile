@@ -7,4 +7,6 @@ group :development do
   gem "rspec"
   gem "rubocop"
   gem "rubocop-rspec", require: false
+  gem "telegram-bot-ruby"
+  gem "httparty"
 end
