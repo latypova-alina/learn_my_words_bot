@@ -20,5 +20,9 @@ class WordInfo
       end
       line
     end
+
+    def the_same_word?(previous_word)
+      word == previous_word
+    end
   end
 end
