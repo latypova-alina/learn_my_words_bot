@@ -1,6 +1,6 @@
 class Mashape
   class << self
-    def definition(word)
+    def information(word)
       HTTParty.get("https://wordsapiv1.p.mashape.com/words/#{word}",
         headers: mashape_headers)
     end
