@@ -15,8 +15,9 @@ class WordInfo
     end
 
     def word_definition
-      line = ""
       response = Mashape.information(word)
+      body = JSON.parse(response.body)
+      line = "#{body['word'].capitalize} [#{body['pronunciation']['all']}]\n\n"
       JSON.parse(response.body)["results"].each do |d|
         line << "#{d['definition'].capitalize}\n\n"
       end
@@ -29,7 +30,7 @@ class WordInfo
       line = ""
       response = Mashape.information(word)
       JSON.parse(response.body)["results"].each do |d|
-        line << "#{d['synonyms'].first.capitalize}\n\n" if d['synonyms']
+        line << "#{d['synonyms'].first.capitalize}\n\n" if d["synonyms"]
       end
       line
     rescue
@@ -41,16 +42,19 @@ class WordInfo
     end
 
     def no_definition?
-      word_definition == nil
+      word_definition.empty? || word_definition.nil?
     end
 
     def no_translation?
-      word_translation == nil
+      word_translation.empty? || word_translation.nil?
     end
 
     def no_word?
-      word == nil
+      word.nil?
     end
 
+    def no_syn?
+      word_synonyms.nil? || word_synonyms.empty?
+    end
   end
 end
