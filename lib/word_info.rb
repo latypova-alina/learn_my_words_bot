@@ -41,20 +41,20 @@ class WordInfo
       word == previous_word
     end
 
-    def no_definition?
-      word_definition.empty? || word_definition.nil?
+    def has_definition?
+      !word_definition.empty? && word_definition
     end
 
-    def no_translation?
-      word_translation.empty? || word_translation.nil?
+    def has_translation?
+      !word_translation.empty? && word_translation
     end
 
-    def no_word?
-      word.nil?
+    def has_word?
+      word
     end
 
-    def no_syn?
-      word_synonyms.nil? || word_synonyms.empty?
+    def has_syn?
+      word_synonyms && !word_synonyms.empty?
     end
   end
 end

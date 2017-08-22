@@ -20,50 +20,50 @@ class BotResponse
     define_patience_counter
     @@previous_word = WordInfo.word
   rescue
-    error_message
+    unknown_error_message
   end
 
   private
 
   def define_command
-    case message.text
-    when "/што?"
-      give_translation if no_errors?("translation")
-    when "/а синонимы?"
-      give_synonyms if no_errors?("syn")
-    when "/start"
-      start_message
-    end
+    give_translation if has_translation?(message.text)
+    give_synonyms if has_syn?(message.text)
+    start_message if message.text == "/start"
+    give_error_message(message.text) if !no_errors?(message.text)
   end
 
-  def error_message
+  def unknown_error_message
     bot.api.sendMessage(chat_id: message.chat.id, text: "Я бы посоветовал тебе не тратить время на ерунду")
     bot.api.sendSticker(chat_id: message.chat.id, sticker: ENV["ANGRY_STATHAM"])
   end
 
   def no_errors?(command)
-    if WordInfo.no_word?
-      give_me_word_message
-      return false
-    end
-    return true if no_command_errors?(command)
-    false
+    command == "/а синонимы?" ? WordInfo.has_syn? : WordInfo.has_translation?
   end
 
-  def no_command_errors?(command)
-    case command
-    when "translation"
-      if WordInfo.no_translation?
-        dont_know_this_word_message
-        return false
-      end
-    when "syn"
-      if WordInfo.no_syn?
-        dont_know_this_word_message
-        return false
-      end
-    end
-    true
+  def give_error_message(command)
+    give_me_word_message if no_word?(command)
+    dont_know_this_word_message if dont_know_error?(command)
+  end
+
+  def no_word?(command)
+    command == "/што?" && !WordInfo.has_word?
+  end
+
+  def has_translation?(command)
+    command == "/што?" && WordInfo.has_translation?
+  end
+
+  def has_syn?(command)
+    command == "/а синонимы?" && WordInfo.has_syn?
+  end
+
+  def unknown_word?
+    !WordInfo.has_definition?
+  end
+
+  def dont_know_error?(command)
+    !has_translation?(command) || !has_syn || unknown_word?
   end
 
   def give_me_word_message
@@ -103,7 +103,7 @@ class BotResponse
   end
 
   def give_translation
-    if @@patience_counter > 1
+    if @@patience_counter > 2
       send_message("Не 'што' а 'что', давай другое слово")
       send_sticker(ENV["STATHAM_FILE_ID"])
     else
