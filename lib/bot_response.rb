@@ -26,10 +26,11 @@ class BotResponse
   private
 
   def define_command
-    give_translation if has_translation?(message.text)
-    give_synonyms if has_syn?(message.text)
-    start_message if message.text == "/start"
-    give_error_message(message.text) if !no_errors?(message.text)
+    command = message.text
+    give_translation if has_translation?(command)
+    give_synonyms if has_syn?(command)
+    start_message if command == "/start"
+    give_error_message unless no_errors?(command)
   end
 
   def unknown_error_message

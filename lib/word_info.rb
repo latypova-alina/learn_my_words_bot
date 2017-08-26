@@ -16,14 +16,18 @@ class WordInfo
 
     def word_definition
       response = Mashape.information(word)
-      body = JSON.parse(response.body)
-      line = "#{body['word'].capitalize} [#{body['pronunciation']['all']}]\n\n"
+      line = "#{word_transcription}\n\n"
       JSON.parse(response.body)["results"].each do |d|
         line << "#{d['definition'].capitalize}\n\n"
       end
       line
     rescue
       nil
+    end
+
+    def word_transcription
+      body = JSON.parse(Mashape.information(word).body)
+      "#{body['word'].capitalize} [#{body['pronunciation']['all']}]"
     end
 
     def word_synonyms
