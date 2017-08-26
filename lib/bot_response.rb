@@ -38,6 +38,7 @@ class BotResponse
   end
 
   def no_errors?(command)
+    return true if command == "/start"
     command == "/а синонимы?" ? WordInfo.has_syn? : WordInfo.has_translation?
   end
 
