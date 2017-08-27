@@ -2,7 +2,7 @@ class Mashape
   class << self
     def information(word)
       HTTParty.get("https://wordsapiv1.p.mashape.com/words/#{word}",
-        headers: mashape_headers)
+        headers: mashape_headers).body
     end
 
     private
