@@ -1,0 +1,26 @@
+{
+  "word": "cat",
+  "results":
+    [{
+      "definition": "cat is cat",
+      "partOfSpeech": "noun",
+      "synonyms": [
+        "true cat"
+      ],
+      "typeOf": [
+        "feline",
+        "felid"
+      ],
+      "hasTypes": [
+        "domestic cat",
+        "felis domesticus",
+        "house cat",
+        "felis catus",
+        "wildcat"
+      ]
+    }],
+  "pronunciation": {
+    "all": "kæt"
+  },
+  "frequency": 4.83
+}
