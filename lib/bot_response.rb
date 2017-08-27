@@ -16,7 +16,7 @@ class BotResponse
   end
 
   def give_response
-    message.text.match(/\//) ? define_command : give_definition
+    message.text.match(%r{/}) ? define_command : give_definition
     define_patience_counter
     @@previous_word = WordInfo.word
   rescue
@@ -27,8 +27,8 @@ class BotResponse
 
   def define_command
     command = message.text
-    give_translation if has_translation?(command)
-    give_synonyms if has_syn?(command)
+    give_translation if translation?(command)
+    give_synonyms if syn?(command)
     start_message if command == "/start"
     give_error_message unless no_errors?(command)
   end
@@ -40,7 +40,7 @@ class BotResponse
 
   def no_errors?(command)
     return true if command == "/start"
-    command == "/а синонимы?" ? WordInfo.has_syn? : WordInfo.has_translation?
+    command == "/а синонимы?" ? WordInfo.syn? : WordInfo.translation?
   end
 
   def give_error_message(command)
@@ -49,23 +49,23 @@ class BotResponse
   end
 
   def no_word?(command)
-    command == "/што?" && !WordInfo.has_word?
+    command == "/што?" && !WordInfo.word?
   end
 
-  def has_translation?(command)
-    command == "/што?" && WordInfo.has_translation?
+  def translation?(command)
+    command == "/што?" && WordInfo.translation?
   end
 
-  def has_syn?(command)
-    command == "/а синонимы?" && WordInfo.has_syn?
+  def syn?(command)
+    command == "/а синонимы?" && WordInfo.syn?
   end
 
   def unknown_word?
-    !WordInfo.has_definition?
+    !WordInfo.definition?
   end
 
   def dont_know_error?(command)
-    !has_translation?(command) || !has_syn || unknown_word?
+    !translation?(command) || !syn?(command) || unknown_word?
   end
 
   def give_me_word_message
@@ -88,7 +88,7 @@ class BotResponse
 
   def define_patience_counter
     if WordInfo.the_same_word?(@@previous_word)
-      @@patience_counter+=1
+      @@patience_counter += 1
     else
       @@patience_counter = 1
     end
