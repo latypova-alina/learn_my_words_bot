@@ -30,7 +30,7 @@ class BotResponse
     give_translation if translation?(command)
     give_synonyms if syn?(command)
     start_message if command == "/start"
-    give_error_message unless no_errors?(command)
+    give_error_message(command) unless no_errors?(command)
   end
 
   def unknown_error_message

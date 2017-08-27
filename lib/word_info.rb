@@ -46,11 +46,11 @@ class WordInfo
     end
 
     def definition?
-      !word_definition.empty? && word_definition
+      word_definition && !word_definition.empty?
     end
 
     def translation?
-      !word_translation.empty? && word_translation
+      word_translation && !word_translation.empty?
     end
 
     def word?
